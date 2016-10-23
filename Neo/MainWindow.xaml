@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         Title="道闸控制软件"
         Width="800"
-        Height="600"
+        Height="200"
         Background="#33CCFF"
         Closing="Window_Closing"
         FontFamily="华文新魏"
@@ -16,19 +16,25 @@
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         mc:Ignorable="d">
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="楷体" />
+            <Setter Property="FontSize" Value="40" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition />
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0"
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
-            <Label Content="{Binding SystemDateTime}"
-                   FontSize="24"
-                   Foreground="Goldenrod"
-                   SnapsToDevicePixels="True" />
             <Image Width="32"
                    Height="32"
                    Margin="10,0,0,0"
@@ -36,5 +42,19 @@
                    Source="close.png"
                    ToolTip="关闭" />
         </StackPanel>
+
+        <Image Grid.Row="2"
+               Width="64"
+               Height="64"
+               VerticalAlignment="Bottom"
+               Source="{Binding StateImage}" />
+
+        <Label Grid.Row="3"
+               HorizontalAlignment="Stretch"
+               VerticalAlignment="Stretch"
+               HorizontalContentAlignment="Center"
+               VerticalContentAlignment="Top"
+               Content="{Binding VerfiyMessage}"
+               Opacity="0.7" />
     </Grid>
 </Window>

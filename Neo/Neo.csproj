@@ -39,11 +39,20 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common">
-      <HintPath>F:\github\QuickDoorSolution\Common\bin\Debug\Common.dll</HintPath>
+      <HintPath>dll\Common.dll</HintPath>
+    </Reference>
+    <Reference Include="HIDSdk, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>dll\HIDSdk.dll</HintPath>
+    </Reference>
+    <Reference Include="SR104">
+      <HintPath>dll\SR104.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -67,8 +76,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\BarCodeHooK.cs" />
+    <Compile Include="Core\ConfigProfile.cs" />
     <Compile Include="Core\HttpBarcode.cs" />
     <Compile Include="Core\HttpMethod.cs" />
+    <Compile Include="Core\MainViewModel.cs" />
     <Compile Include="Core\VerfyCloud.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -108,6 +120,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="dll\Common.dll" />
+    <Content Include="dll\HIDSdk.dll" />
+    <Content Include="dll\Iaspec.Net.Common.dll" />
+    <Content Include="dll\SR104.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
