@@ -76,12 +76,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\BarCodeHooK.cs" />
+    <Compile Include="Core\BarCodeHook.cs" />
     <Compile Include="Core\ConfigProfile.cs" />
     <Compile Include="Core\HttpBarcode.cs" />
     <Compile Include="Core\HttpMethod.cs" />
     <Compile Include="Core\MainViewModel.cs" />
     <Compile Include="Core\VerfyCloud.cs" />
+    <Compile Include="Core\WGSerialReader.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>

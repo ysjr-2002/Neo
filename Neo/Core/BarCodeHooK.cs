@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace NeoVisitor
 {
-    public class BardCodeHooK
+    public class BardCodeHook
     {
         public delegate void BardCodeDeletegate(BarCodes barCode);
         public event BardCodeDeletegate BarCodeEvent;
-
         //定义成静态，这样不会抛出回收异常
         private static HookProc hookproc;
 
@@ -90,53 +89,35 @@ namespace NeoVisitor
                     uint uKey = 0;
                     GetKeyboardState(kbArray);
 
-
                     if (ToAscii(barCode.VirtKey, barCode.ScanCode, kbArray, ref uKey, 0))
                     {
                         barCode.Ascll = uKey;
                         barCode.Chr = Convert.ToChar(uKey);
-
-                        Trace.WriteLine(uKey);
+                        Trace.WriteLine(uKey + " " + barCode.Chr);
                     }
                     else
                     {
-                        Trace.WriteLine("error" + barCode.VirtKey + " " + uKey);
                         notChar = true;
                     }
 
                     TimeSpan ts = DateTime.Now.Subtract(barCode.Time);
 
-                    if (ts.TotalMilliseconds > 30)
+                    if ((msg.message & 0xff) == 13)
                     {
-                        //时间戳，大于50 毫秒表示手动输入
-                        //strBarCode = barCode.Chr.ToString();
+                        //回车
+                        barCode.BarCode = sbBarCode.ToString();// barCode.OriginalBarCode;
+                        barCode.IsValid = true;
                         sbBarCode.Remove(0, sbBarCode.Length);
-                        sbBarCode.Append(barCode.Chr.ToString());
-                        barCode.OriginalChrs = " " + Convert.ToString(barCode.Chr);
-                        barCode.OriginalAsciis = " " + Convert.ToString(barCode.Ascll);
-                        barCode.OriginalBarCode = Convert.ToString(barCode.Chr);
+                        //Trace.WriteLine("回车->" + barCode.BarCode);
+                        Trace.WriteLine("回车");
                     }
                     else
                     {
-                       
-                        if ((msg.message & 0xff) == 13 )
-                        {//回车
-                         //barCode.BarCode = strBarCode;
-                            barCode.BarCode = sbBarCode.ToString();// barCode.OriginalBarCode;
-                            barCode.IsValid = true;
-                            sbBarCode.Remove(0, sbBarCode.Length);
-
-                            Trace.WriteLine(barCode.BarCode);
-                        }
-                        else
+                        if (!notChar)
                         {
-                            if(!notChar)
-                            {
-                                sbBarCode.Append(barCode.Chr.ToString());
-                                Trace.WriteLine(sbBarCode.ToString());
-                            }
+                            sbBarCode.Append(barCode.Chr.ToString());
+                            //Trace.WriteLine(sbBarCode.ToString());
                         }
-                        //strBarCode += barCode.Chr.ToString();
                     }
                     barCode.Time = DateTime.Now;
                     try
@@ -144,24 +125,18 @@ namespace NeoVisitor
                         if (BarCodeEvent != null && barCode.IsValid)
                         {
                             AsyncCallback callback = new AsyncCallback(AsyncBack);
-                            //object obj;
                             Delegate[] delArray = BarCodeEvent.GetInvocationList();
-                            //foreach (Delegate del in delArray)
                             foreach (BardCodeDeletegate del in delArray)
                             {
                                 try
                                 {
-                                    //方法1
-                                    //obj = del.DynamicInvoke(barCode);
-                                    //方法2
-                                    del.BeginInvoke(barCode, callback, del);//异步调用防止界面卡死
+                                    del.BeginInvoke(barCode, callback, del);
                                 }
                                 catch (Exception ex)
                                 {
                                     throw ex;
                                 }
                             }
-                            //BarCodeEvent(barCode);//触发事件
                             barCode.BarCode = "";
                             barCode.OriginalChrs = "";
                             barCode.OriginalAsciis = "";

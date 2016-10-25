@@ -20,11 +20,13 @@ using System.Windows.Shapes;
 namespace NeoVisitor
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// 主控系统
     /// </summary>
     public partial class MainWindow : Window
     {
-        MainViewModel vm = null;
+        private MainViewModel vm = null;
+        private FuncTimeout timeout = null;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -34,16 +36,12 @@ namespace NeoVisitor
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            int f = (int)'h';
-            var j = (int)'t';
-
-            var a = (char)104;
-            var c = (char)106;
+            timeout = new FuncTimeout();
             AutoRun();
             vm.Init();
         }
 
-        private static void AutoRun()
+        private void AutoRun()
         {
             var appName = System.Windows.Forms.Application.ProductName;
             var executePath = System.Windows.Forms.Application.ExecutablePath;
@@ -63,8 +61,32 @@ namespace NeoVisitor
                 e.Cancel = true;
                 return;
             }
-
             vm.Dispose();
+        }
+
+        private void txtBarcode_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (txtBarcode.Text.Length > 0)
+                {
+                    var qrcode = txtBarcode.Text;
+                    Task.Factory.StartNew(() =>
+                    {
+                        vm.ReadBarCode(qrcode);
+                        vm.QRCode = "";
+                    });
+
+                    //收到二维码事件
+                    //timeout.StartOnce(2000, () =>
+                    //{
+                    //    Application.Current.Dispatcher.Invoke(() =>
+                    //    {
+                    //        txtBarcode.Clear();
+                    //    });
+                    //});
+                }
+            }
         }
     }
 }

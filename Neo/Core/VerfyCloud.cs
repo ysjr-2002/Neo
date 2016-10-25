@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace NeoVisitor.Core
 {
-    class VerifyCloud
+    static class VerifyCloud
     {
         private const string VERIFY_URL = "http://v.wapwei.com/index.php?g=Api&m=Face&a=valid&code={0}";
 
-        private VerifyCloud()
-        {
-        }
         /// <summary>
         /// 
         /// </summary>
