@@ -101,6 +101,7 @@ namespace NeoVisitor.Core
         public void ReadBarCode(string qrcode)
         {
             var success = true;
+            Trace.WriteLine(qrcode);
             //success = VerifyCloud.Verify(qrcode);
             if (success)
             {

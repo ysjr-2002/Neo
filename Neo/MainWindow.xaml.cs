@@ -74,17 +74,11 @@ namespace NeoVisitor
                     Task.Factory.StartNew(() =>
                     {
                         vm.ReadBarCode(qrcode);
-                        vm.QRCode = "";
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            txtBarcode.Clear();
+                        });
                     });
-
-                    //收到二维码事件
-                    //timeout.StartOnce(2000, () =>
-                    //{
-                    //    Application.Current.Dispatcher.Invoke(() =>
-                    //    {
-                    //        txtBarcode.Clear();
-                    //    });
-                    //});
                 }
             }
         }
