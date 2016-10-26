@@ -4,6 +4,7 @@ using Common.NotifyBase;
 using SR104;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -99,8 +100,8 @@ namespace NeoVisitor.Core
 
         public void ReadBarCode(string qrcode)
         {
-            var success = false;
-            success = VerifyCloud.Verify(qrcode);
+            var success = true;
+            //success = VerifyCloud.Verify(qrcode);
             if (success)
             {
                 StateImage = "yes.png";
