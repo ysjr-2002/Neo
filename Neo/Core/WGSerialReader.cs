@@ -72,7 +72,7 @@ namespace NeoVisitor.Core
                 }
                 catch
                 {
-                    Console.WriteLine("关闭串口");
+                    LogHelper.Info("关闭串口");
                 }
             }
         }

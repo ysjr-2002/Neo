@@ -58,7 +58,7 @@
                      HorizontalAlignment="Stretch"
                      VerticalContentAlignment="Center"
                      FontSize="20"
-                     Text="{Binding QRCode}"
+                     Text="{Binding QRCode,UpdateSourceTrigger=PropertyChanged}"
                      PreviewKeyDown="txtBarcode_PreviewKeyDown" />
         </StackPanel>
 
