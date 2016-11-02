@@ -1,6 +1,5 @@
 ﻿using Common;
 using Common.Dialog;
-using HIDSdk;
 using NeoVisitor.Core;
 using System;
 using System.Collections.Generic;

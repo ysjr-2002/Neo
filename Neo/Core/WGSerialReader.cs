@@ -86,10 +86,18 @@ namespace NeoVisitor.Core
         /// </summary>
         public void Dispose()
         {
-            _stop = true;
+            Dispose(true);
+        }
 
-            if (_serialPort != null)
-                _serialPort.Close();
+        private void Dispose(bool dispose)
+        {
+            if (dispose)
+            {
+                _stop = true;
+
+                if (_serialPort != null)
+                    _serialPort.Close();
+            }
         }
     }
 }

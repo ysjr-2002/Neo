@@ -16,7 +16,7 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -40,10 +40,6 @@
   <ItemGroup>
     <Reference Include="Common">
       <HintPath>dll\Common.dll</HintPath>
-    </Reference>
-    <Reference Include="HIDSdk, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>dll\HIDSdk.dll</HintPath>
     </Reference>
     <Reference Include="SR104">
       <HintPath>dll\SR104.dll</HintPath>

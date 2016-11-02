@@ -13,7 +13,7 @@ using System.Windows.Threading;
 
 namespace NeoVisitor.Core
 {
-    class MainViewModel : PropertyNotifyObject
+    class MainViewModel : PropertyNotifyObject, IDisposable
     {
         private const string OKImage = "yes.png";
         private const string NOImage = "no.png";
