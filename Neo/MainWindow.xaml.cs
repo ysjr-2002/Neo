@@ -53,7 +53,7 @@ namespace NeoVisitor
         {
             var appName = System.Windows.Forms.Application.ProductName;
             var executePath = System.Windows.Forms.Application.ExecutablePath;
-            Funs.runWhenStart(false, appName, executePath);
+            Funs.runWhenStart(true, appName, executePath);
         }
 
         private void Image_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
