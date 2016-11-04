@@ -8,22 +8,13 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Script.Serialization;
 
 namespace NeoVisitor.Core
 {
     class HttpMethod
     {
-        public static HttpBarcode GetBarCode(string url)
-        {
-            var json = Get(url);
-            if (json.IsEmpty())
-                return new HttpBarcode();
-
-            var code = HttpBarcodeDeserialize<HttpBarcode>(json);
-            return code;
-        }
-
         public static HttpBarcode VerifyCode(string url)
         {
             var json = Get(url);
@@ -38,9 +29,10 @@ namespace NeoVisitor.Core
         {
             Stopwatch sw = Stopwatch.StartNew();
             var webRequest = (HttpWebRequest)WebRequest.Create(url);
-            LogHelper.Info("服务地址:" + url);
+            LogHelper.Info(url);
             webRequest.Method = "Get";
             webRequest.Timeout = 5000;
+            var json = "";
             try
             {
                 using (var webResponse = webRequest.GetResponse())
@@ -48,21 +40,71 @@ namespace NeoVisitor.Core
                     using (var stream = webResponse.GetResponseStream())
                     {
                         StreamReader reader = new StreamReader(stream);
-                        var json = reader.ReadToEnd();
-                        sw.Stop();
-                        LogHelper.Info("调用耗时:" + sw.ElapsedMilliseconds);
-                        var jsonStr = "调用返回:" + json;
+                        json = reader.ReadToEnd();
+                        var jsonStr = json;
                         jsonStr = jsonStr.Replace("{", "[");
                         jsonStr = jsonStr.Replace("}", "]");
                         LogHelper.LogJson(jsonStr);
-                        return json;
                     }
                 }
             }
             catch (Exception ex)
             {
                 LogHelper.Info("访问服务异常:" + ex.Message);
+                json = string.Empty;
+            }
+            finally
+            {
+                sw.Stop();
+                LogHelper.Info("call api:" + sw.ElapsedMilliseconds);
+            }
+            return json;
+        }
+
+        public static HttpBarcode VerifyCode(string url, string code)
+        {
+            var json = Post(url, code);
+            if (json.IsEmpty())
+                return new HttpBarcode();
+
+            var httpbarcode = HttpBarcodeDeserialize<HttpBarcode>(json);
+            return httpbarcode;
+        }
+
+        public static string Post(string url, string code)
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.Method = "POST";
+            LogHelper.Info("code->" + code);
+            code = HttpUtility.UrlEncode(code);
+            var data = "code=" + code;
+            var buffer = Encoding.UTF8.GetBytes(data);
+            request.ContentLength = buffer.Length;
+            try
+            {
+                var requestStream = request.GetRequestStream();
+                requestStream.Write(buffer, 0, buffer.Length);
+                requestStream.Close();
+
+                var response = request.GetResponse();
+                var responseStream = response.GetResponseStream();
+                StreamReader sr = new StreamReader(responseStream, Encoding.UTF8);
+                var content = sr.ReadToEnd();
+                sr.Close();
+                responseStream.Close();
+                return content;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Info("访问服务异常->" + ex.Message);
                 return string.Empty;
+            }
+            finally
+            {
+                sw.Stop();
+                LogHelper.Info("call->" + sw.ElapsedMilliseconds);
             }
         }
 

@@ -34,6 +34,12 @@ namespace NeoVisitor
             InitializeComponent();
             vm = new Core.MainViewModel();
             this.DataContext = vm;
+            this.AddHandler(Window.PreviewMouseDownEvent, new MouseButtonEventHandler(Window_MouseDown));
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //this.DragMove();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

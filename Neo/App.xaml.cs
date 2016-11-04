@@ -1,10 +1,14 @@
-﻿using NeoVisitor;
+﻿using Common.Log;
+using NeoVisitor;
 using NeoVisitor.Core;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Web;
 using System.Windows;
 
 namespace Neo
@@ -16,11 +20,20 @@ namespace Neo
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            ConfigProfile.Instance.ReadConfig();
-
-            MainWindow window = new MainWindow();
-            window.Show();
-            base.OnStartup(e);
+            var appName = "neo";
+            var createNew = false;
+            var mutex = new Mutex(true, appName, out createNew);
+            if (createNew)
+            {
+                ConfigProfile.Instance.ReadConfig();
+                MainWindow window = new MainWindow();
+                window.Show();
+                base.OnStartup(e);
+            }
+            else
+            {
+                Application.Current.Shutdown();
+            }
         }
     }
 }

@@ -41,10 +41,10 @@ namespace NeoVisitor.Core
         /// <summary>
         /// API Url
         /// </summary>
-        public string MeetingAPIUrl
+        public string opendoorAPIUrl
         {
-            get { return this.GetValue(s => s.MeetingAPIUrl); }
-            set { this.SetValue(s => s.MeetingAPIUrl, value); }
+            get { return this.GetValue(s => s.opendoorAPIUrl); }
+            set { this.SetValue(s => s.opendoorAPIUrl, value); }
         }
 
         public string RebootWeekofDay
@@ -97,7 +97,7 @@ namespace NeoVisitor.Core
                 TermID = GetKey("termId");
                 VirtualPort = GetKey("virtualPort");
                 SwitchPort = GetKey("switchPort");
-                MeetingAPIUrl = GetKey("opendoorAPIUrl");
+                opendoorAPIUrl = GetKey("opendoorAPIUrl");
                 RebootWeekofDay = GetKey("rebootweekofDay");
                 RebootTime = GetKey("rebootTime");
             }
@@ -128,7 +128,7 @@ namespace NeoVisitor.Core
                 Configuration cfg = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                 cfg.AppSettings.Settings["termId"].Value = TermID.ToString();
                 cfg.AppSettings.Settings["inPortName"].Value = SwitchPort;
-                cfg.AppSettings.Settings["opendoorAPIUrl"].Value = MeetingAPIUrl;
+                cfg.AppSettings.Settings["opendoorAPIUrl"].Value = opendoorAPIUrl;
                 cfg.AppSettings.Settings["rebootweekofDay"].Value = RebootWeekofDay;
                 cfg.AppSettings.Settings["reboottime"].Value = RebootTime;
                 cfg.Save();

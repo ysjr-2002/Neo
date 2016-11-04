@@ -1,28 +1,52 @@
-﻿using System;
+﻿using Common.Log;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace NeoVisitor.Core
 {
-    static class VerifyCloud
+    class VerifyCloud
     {
-        private const string VERIFY_URL = "http://v.wapwei.com/index.php?g=Api&m=Face&a=valid&code={0}";
+        private static readonly string VERIFY_URL = "";
+        private static string etx = "&code={0}";
 
+        static VerifyCloud()
+        {
+            VERIFY_URL = ConfigProfile.Instance.opendoorAPIUrl;
+        }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public static bool Verify(string code)
+        public static bool GetVerify(string code)
         {
-            var url = string.Format(VERIFY_URL, code);
+            var url = string.Concat(VERIFY_URL, etx);
+            code = HttpUtility.UrlEncode(code);
+            url = string.Format(url, code);
             var httpBarcode = HttpMethod.VerifyCode(url);
             if (httpBarcode.status == 0)
                 return true;
             else
                 return false;
+        }
+
+        public static bool PostVerify(string code)
+        {
+            var httpBarcode = HttpMethod.VerifyCode(VERIFY_URL, code);
+            if (httpBarcode.status == 0)
+            {
+                LogHelper.Info("授权通行");
+                return true;
+            }
+            else
+            {
+                LogHelper.Info("未授权");
+                return false;
+            }
         }
     }
 }

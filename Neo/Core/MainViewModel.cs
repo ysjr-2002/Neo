@@ -68,6 +68,18 @@ namespace NeoVisitor.Core
             _updateTimer.Interval = TimeSpan.FromSeconds(1);
             _updateTimer.Tick += UpdateTimer_Tick;
             _updateTimer.Start();
+
+            CheatCall();
+        }
+
+        private async void CheatCall()
+        {
+            var task = Task.Factory.StartNew(() =>
+            {
+                var qrcode = "run";
+                VerifyCloud.PostVerify(qrcode);
+            });
+            await task;
         }
 
         private void UpdateTimer_Tick(object sender, EventArgs e)
@@ -101,7 +113,7 @@ namespace NeoVisitor.Core
         public void ReadBarCode(string qrcode)
         {
             var success = true;
-            //success = VerifyCloud.Verify(qrcode);
+            success = VerifyCloud.PostVerify(qrcode);
             if (success)
             {
                 StateImage = "yes.png";
