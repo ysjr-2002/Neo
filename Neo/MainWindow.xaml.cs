@@ -49,6 +49,9 @@ namespace NeoVisitor
             vm.Init();
         }
 
+
+
+
         private void AutoRun()
         {
             var appName = System.Windows.Forms.Application.ProductName;
