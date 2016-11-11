@@ -21,8 +21,7 @@ namespace NeoVisitor.Core
 
         private WGSerialReader _wgReader = null;
         private BardCodeHook BarCode = new BardCodeHook();
-        private DispatcherTimer _updateTimer = null;
-        private string[] _rebootWeekofday = null;
+        
         private const int Delay = 1000;
         private FuncTimeout _timeout = null;
 
@@ -63,12 +62,6 @@ namespace NeoVisitor.Core
 
             VerfiyMessage = WelCome;
 
-            _rebootWeekofday = ConfigProfile.Instance.RebootWeekofDay.Split(',');
-            _updateTimer = new DispatcherTimer();
-            _updateTimer.Interval = TimeSpan.FromSeconds(1);
-            _updateTimer.Tick += UpdateTimer_Tick;
-            _updateTimer.Start();
-
             CheatCall();
         }
 
@@ -80,29 +73,6 @@ namespace NeoVisitor.Core
                 VerifyCloud.PostVerify(qrcode);
             });
             await task;
-        }
-
-        private void UpdateTimer_Tick(object sender, EventArgs e)
-        {
-            RebootMachine();
-        }
-
-        private void RebootMachine()
-        {
-            int day = (int)DateTime.Now.DayOfWeek;
-            if (_rebootWeekofday.Length < day)
-                return;
-
-            if (_rebootWeekofday[day] == "1")
-            {
-                var nowTime = DateTime.Now.ToString("HH:mm");
-                if (nowTime == ConfigProfile.Instance.RebootTime)
-                {
-                    _updateTimer.Stop();
-                    LogHelper.Info("执行重启计划 {0}", nowTime);
-                    RebootMachineAPI.ExitWindow();
-                }
-            }
         }
 
         private void BarCode_BarCodeEvent(BardCodeHook.BarCodes barCode)

@@ -1,5 +1,6 @@
 ﻿using Common;
 using Common.Dialog;
+using Common.Log;
 using NeoVisitor.Core;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace NeoVisitor
 {
@@ -28,18 +30,13 @@ namespace NeoVisitor
     {
         private MainViewModel vm = null;
         private FuncTimeout timeout = null;
-
+        private DispatcherTimer _updateTimer = null;
+        private string[] _rebootWeekofday = null;
         public MainWindow()
         {
             InitializeComponent();
             vm = new Core.MainViewModel();
             this.DataContext = vm;
-            this.AddHandler(Window.PreviewMouseDownEvent, new MouseButtonEventHandler(Window_MouseDown));
-        }
-
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            //this.DragMove();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -47,10 +44,37 @@ namespace NeoVisitor
             timeout = new FuncTimeout();
             AutoRun();
             vm.Init();
+
+            _rebootWeekofday = ConfigProfile.Instance.RebootWeekofDay.Split(',');
+            _updateTimer = new DispatcherTimer();
+            _updateTimer.Interval = TimeSpan.FromSeconds(1);
+            _updateTimer.Tick += UpdateTimer_Tick;
+            _updateTimer.Start();
         }
 
+        private void UpdateTimer_Tick(object sender, EventArgs e)
+        {
+            txtBarcode.Focus();
+            RebootMachine();
+        }
 
+        private void RebootMachine()
+        {
+            int day = (int)DateTime.Now.DayOfWeek;
+            if (_rebootWeekofday.Length < day)
+                return;
 
+            if (_rebootWeekofday[day] == "1")
+            {
+                var nowTime = DateTime.Now.ToString("HH:mm");
+                if (nowTime == ConfigProfile.Instance.RebootTime)
+                {
+                    _updateTimer.Stop();
+                    LogHelper.Info("执行重启计划 {0}", nowTime);
+                    RebootMachineAPI.ExitWindow();
+                }
+            }
+        }
 
         private void AutoRun()
         {
