@@ -32,6 +32,7 @@ namespace NeoVisitor
         private FuncTimeout timeout = null;
         private DispatcherTimer _updateTimer = null;
         private string[] _rebootWeekofday = null;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -80,7 +81,7 @@ namespace NeoVisitor
         {
             var appName = System.Windows.Forms.Application.ProductName;
             var executePath = System.Windows.Forms.Application.ExecutablePath;
-            Funs.runWhenStart(true, appName, executePath);
+            Funs.runWhenStart(false, appName, executePath);
         }
 
         private void Image_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
