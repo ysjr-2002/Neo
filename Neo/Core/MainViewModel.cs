@@ -21,8 +21,7 @@ namespace NeoVisitor.Core
 
         private WGSerialReader _wgReader = null;
         private BardCodeHook BarCode = new BardCodeHook();
-        
-        private const int Delay = 1000;
+
         private FuncTimeout _timeout = null;
 
         public string StateImage
@@ -106,7 +105,7 @@ namespace NeoVisitor.Core
         private void OpenGate()
         {
             SRController.Close(1);
-            Thread.Sleep(Delay);
+            Thread.Sleep(ConfigProfile.Instance.OpenDelay);
             SRController.Free(1);
         }
 

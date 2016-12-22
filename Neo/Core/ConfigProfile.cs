@@ -1,4 +1,5 @@
-﻿using Common.Log;
+﻿using Common;
+using Common.Log;
 using Common.NotifyBase;
 using System;
 using System.Collections.Generic;
@@ -59,6 +60,11 @@ namespace NeoVisitor.Core
             set { this.SetValue(s => s.RebootTime, value); }
         }
 
+        public int OpenDelay
+        {
+            get { return this.GetValue(s => s.OpenDelay); }
+            set { this.SetValue(s => s.OpenDelay, value); }
+        }
 
         static ConfigProfile()
         {
@@ -100,6 +106,9 @@ namespace NeoVisitor.Core
                 opendoorAPIUrl = GetKey("opendoorAPIUrl");
                 RebootWeekofDay = GetKey("rebootweekofDay");
                 RebootTime = GetKey("rebootTime");
+                OpenDelay = GetKey("openDelay").ToInt32();
+                if (OpenDelay == 0)
+                    OpenDelay = 200;
             }
             catch
             {
