@@ -1,5 +1,6 @@
 ﻿using Common.Log;
 using NeoVisitor;
+using NeoVisitor.config;
 using NeoVisitor.Core;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace Neo
             var mutex = new Mutex(true, appName, out createNew);
             if (createNew)
             {
+                Channels.Load();
                 ConfigProfile.Instance.ReadConfig();
                 MainWindow window = new MainWindow();
                 window.Show();

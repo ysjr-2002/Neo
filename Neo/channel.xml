@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<channels>
+  <channel>
+    <readerIp>172.16.1.68</readerIp>
+    <gateIp>172.16.1.75</gateIp>
+  </channel>
+  <channel>
+    <readerIp>172.16.1.72</readerIp>
+    <gateIp>172.16.1.76</gateIp>
+  </channel>
+</channels>

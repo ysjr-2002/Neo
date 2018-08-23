@@ -42,6 +42,7 @@ namespace NeoVisitor.Core
             set { this.SetValue(s => s.QRCode, value); }
         }
 
+        Obria.Core.UdpComServer udpserver = null;
         public void Init()
         {
             if (ConfigProfile.Instance.VirtualPort.ToLower() == "none")
@@ -62,6 +63,16 @@ namespace NeoVisitor.Core
             VerfiyMessage = WelCome;
 
             CheatCall();
+
+            udpserver = new Obria.Core.UdpComServer(9876);
+            udpserver.OnMessageInComming += Udpserver_OnMessageInComming;
+            udpserver.ReceiveAsync();
+        }
+
+        private void Udpserver_OnMessageInComming(object sender, Obria.Core.DataEventArgs e)
+        {
+            var code = e.BarCode;
+            ReadBarCode(code);
         }
 
         private async void CheatCall()
@@ -112,6 +123,7 @@ namespace NeoVisitor.Core
         public void Dispose()
         {
             BarCode.Stop();
+            udpserver?.Stop();
             SRController.ClosePort();
             if (_wgReader != null)
             {

@@ -49,6 +49,10 @@
     <Reference Include="Common">
       <HintPath>dll\Common.dll</HintPath>
     </Reference>
+    <Reference Include="Obria.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>dll\Obria.Core.dll</HintPath>
+    </Reference>
     <Reference Include="SR104">
       <HintPath>dll\SR104.dll</HintPath>
     </Reference>
@@ -134,6 +138,7 @@
     <Content Include="dll\Common.dll" />
     <Content Include="dll\HIDSdk.dll" />
     <Content Include="dll\Iaspec.Net.Common.dll" />
+    <Content Include="dll\Obria.Core.dll" />
     <Content Include="dll\SR104.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
