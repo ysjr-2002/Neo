@@ -85,6 +85,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="config\Channel.cs" />
+    <Compile Include="config\ChannelList.cs" />
     <Compile Include="Core\BarCodeHook.cs" />
     <Compile Include="Core\ConfigProfile.cs" />
     <Compile Include="Core\HttpBarcode.cs" />
@@ -135,6 +137,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Resource Include="channel.xml" />
     <Content Include="dll\Common.dll" />
     <Content Include="dll\HIDSdk.dll" />
     <Content Include="dll\Iaspec.Net.Common.dll" />
