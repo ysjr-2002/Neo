@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <channels>
+  <!--通道一-->
   <channel>
-    <readerIp>172.16.1.68</readerIp>
-    <gateIp>172.16.1.75</gateIp>
+    <readerIp>192.168.3.54</readerIp>
+    <gateIp>192.168.3.55</gateIp>
   </channel>
+  <!--通道二-->
   <channel>
     <readerIp>172.16.1.72</readerIp>
     <gateIp>172.16.1.76</gateIp>

@@ -109,7 +109,7 @@ namespace NeoVisitor
                     var qrcode = txtBarcode.Text;
                     Task.Factory.StartNew(() =>
                     {
-                        vm.ReadBarCode(qrcode);
+                        vm.ReadCode(qrcode);
                         vm.QRCode = "";
                     });
                 }

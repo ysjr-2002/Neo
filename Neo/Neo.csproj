@@ -57,8 +57,11 @@
       <HintPath>dll\SR104.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
@@ -83,6 +86,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Wcf\IVisitorService.cs" />
+    <Compile Include="Wcf\WcfInvoker.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="config\Channel.cs" />
@@ -137,7 +142,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Resource Include="channel.xml" />
+    <None Include="channel.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="dll\Common.dll" />
     <Content Include="dll\HIDSdk.dll" />
     <Content Include="dll\Iaspec.Net.Common.dll" />

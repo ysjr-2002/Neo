@@ -109,6 +109,8 @@ namespace NeoVisitor.Core
                 OpenDelay = GetKey("openDelay").ToInt32();
                 if (OpenDelay == 0)
                     OpenDelay = 200;
+
+                var temp = GetKey("localserver");
             }
             catch
             {

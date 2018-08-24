@@ -39,12 +39,12 @@ namespace NeoVisitor.Core
             var httpBarcode = HttpMethod.VerifyCode(VERIFY_URL, code);
             if (httpBarcode.status == 0)
             {
-                LogHelper.Info("授权通行");
+                LogHelper.Info("请通行->" + code);
                 return true;
             }
             else
             {
-                LogHelper.Info("未授权");
+                LogHelper.Info("未授权->" + code);
                 return false;
             }
         }

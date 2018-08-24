@@ -1,6 +1,9 @@
 ﻿using Common;
 using Common.Log;
 using Common.NotifyBase;
+using NeoVisitor.config;
+using NeoVisitor.Wcf;
+using Obria.Core;
 using SR104;
 using System;
 using System.Collections.Generic;
@@ -53,7 +56,7 @@ namespace NeoVisitor.Core
             else
             {
                 _wgReader = new WGSerialReader();
-                _wgReader.SetQRCodeCallback(ReadBarCode);
+                _wgReader.SetQRCodeCallback(ReadCode);
                 _wgReader.Open(ConfigProfile.Instance.VirtualPort);
             }
 
@@ -62,17 +65,21 @@ namespace NeoVisitor.Core
 
             VerfiyMessage = WelCome;
 
-            CheatCall();
-
-            udpserver = new Obria.Core.UdpComServer(9876);
+            udpserver = new UdpComServer(9876);
             udpserver.OnMessageInComming += Udpserver_OnMessageInComming;
             udpserver.ReceiveAsync();
+
+            CheatCall();
         }
 
         private void Udpserver_OnMessageInComming(object sender, Obria.Core.DataEventArgs e)
         {
             var code = e.BarCode;
-            ReadBarCode(code);
+            var channel = Channels.ChannelList.FirstOrDefault(s => s.ReaderIp == e.ReaderIp);
+            if (channel != null)
+            {
+                RemoteCode(code, true, channel.GateIp);
+            }
         }
 
         private async void CheatCall()
@@ -90,22 +97,39 @@ namespace NeoVisitor.Core
             LogHelper.Info(barCode.BarCode);
         }
 
-        public void ReadBarCode(string qrcode)
+        /// <summary>
+        /// Usb或串口数据
+        /// </summary>
+        /// <param name="qrcode"></param>
+        public void ReadCode(string qrcode)
         {
-            var success = true;
-            success = VerifyCloud.PostVerify(qrcode);
-            if (success)
+            RemoteCode(qrcode, false, "");
+        }
+
+        /// <summary>
+        /// 网络二维码
+        /// </summary>
+        /// <param name="qrcode"></param>
+        /// <param name="bRemote"></param>
+        /// <param name="gateIp"></param>
+        public void RemoteCode(string qrcode, bool bRemote, string gateIp)
+        {
+            var check = ReadBarCode(qrcode);
+            if (bRemote)
             {
-                StateImage = "yes.png";
-                VerfiyMessage = "请通行";
-                OpenGate();
+                //远程二维码，进行远程开闸
+                if (check)
+                {
+                    OpenRemoteGate(gateIp);
+                }
             }
             else
             {
-                StateImage = "no.png";
-                VerfiyMessage = "授权失败";
+                if (check)
+                {
+                    OpenLocalGate();
+                }
             }
-
             _timeout.StartOnce(2000, () =>
             {
                 StateImage = "";
@@ -113,7 +137,58 @@ namespace NeoVisitor.Core
             });
         }
 
-        private void OpenGate()
+        private bool ReadBarCode(string qrcode)
+        {
+            if (qrcode.StartsWith("LOCAL"))
+            {
+                //本地验证
+                var elapsedTime = 0L;
+                var error = "";
+                var array = qrcode.Split(',');
+                var visitorId = Convert.ToInt64(array[1]);
+                var visitorguid = array[2];
+                var open = WcfInvoker.LocalCheck(visitorId, visitorguid, ConfigProfile.Instance.TermID, out elapsedTime, out error);
+                if (open)
+                {
+                    StateImage = "yes.png";
+                    VerfiyMessage = "请通行";
+                    LogHelper.Info("请通行->" + visitorguid);
+                    return true;
+                }
+                else
+                {
+                    StateImage = "no.png";
+                    VerfiyMessage = "未授权";
+                    LogHelper.Info("未授权->" + visitorguid + error);
+                    return false;
+                }
+            }
+            else
+            {
+                var success = true;
+                success = VerifyCloud.PostVerify(qrcode);
+                if (success)
+                {
+                    StateImage = "yes.png";
+                    VerfiyMessage = "请通行";
+                    return true;
+                }
+                else
+                {
+                    StateImage = "no.png";
+                    VerfiyMessage = "未授权";
+                    return false;
+                }
+            }
+        }
+
+        private void OpenRemoteGate(string gateIp)
+        {
+            NIRenGate remote = new NIRenGate(gateIp);
+            remote.Open(5);
+        }
+
+        private void OpenLocalGate()
         {
             SRController.Close(1);
             Thread.Sleep(ConfigProfile.Instance.OpenDelay);

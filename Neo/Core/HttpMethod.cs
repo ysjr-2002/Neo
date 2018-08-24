@@ -77,7 +77,6 @@ namespace NeoVisitor.Core
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.ContentType = "application/x-www-form-urlencoded";
             request.Method = "POST";
-            LogHelper.Info("code->" + code);
             code = HttpUtility.UrlEncode(code);
             var data = "code=" + code;
             var buffer = Encoding.UTF8.GetBytes(data);
