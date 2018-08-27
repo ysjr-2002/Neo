@@ -51,7 +51,7 @@ namespace NeoVisitor.Core
             if (ConfigProfile.Instance.VirtualPort.ToLower() == "none")
             {
                 BarCode.BarCodeEvent += new BardCodeHook.BardCodeDeletegate(BarCode_BarCodeEvent);
-                //BarCode.Start();
+                BarCode.Start();
             }
             else
             {
