@@ -36,7 +36,7 @@ namespace NeoVisitor
         public MainWindow()
         {
             InitializeComponent();
-            vm = new Core.MainViewModel();
+            vm = new MainViewModel();
             this.DataContext = vm;
         }
 

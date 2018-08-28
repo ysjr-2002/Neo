@@ -114,6 +114,7 @@ namespace NeoVisitor.Core
         /// <param name="gateIp"></param>
         public void RemoteCode(string qrcode, bool bRemote, string gateIp)
         {
+            QRCode = qrcode;
             var check = ReadBarCode(qrcode);
             if (bRemote)
             {
@@ -133,6 +134,7 @@ namespace NeoVisitor.Core
             _timeout.StartOnce(2000, () =>
             {
                 StateImage = "";
+                QRCode = "";
                 VerfiyMessage = WelCome;
             });
         }
@@ -185,7 +187,7 @@ namespace NeoVisitor.Core
         private void OpenRemoteGate(string gateIp)
         {
             NIRenGate remote = new NIRenGate(gateIp);
-            remote.Open(5);
+            remote.Open(1);
         }
 
         private void OpenLocalGate()
