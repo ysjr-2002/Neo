@@ -128,7 +128,8 @@ namespace NeoVisitor.Core
             {
                 if (check)
                 {
-                    OpenLocalGate();
+                    //OpenLocalGate();
+                    OpenRemoteGate("192.168.1.174");
                 }
             }
             _timeout.StartOnce(2000, () =>
