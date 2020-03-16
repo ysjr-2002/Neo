@@ -129,7 +129,8 @@ namespace NeoVisitor.Core
                 if (check)
                 {
                     //OpenLocalGate();
-                    OpenRemoteGate("192.168.1.174");
+                    var ip = System.IO.File.ReadAllText("gate.txt");
+                    OpenRemoteGate(ip);
                 }
             }
             _timeout.StartOnce(2000, () =>
